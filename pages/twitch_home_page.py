@@ -2,7 +2,7 @@ import time
 from urllib.parse import quote
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-from utils.waits import wait_visible, wait_first_visible
+from utils.waits import wait_visible
 from utils.scroll import scroll_down
 from utils.popup import close_popups_best_effort
 from selenium.common.exceptions import ElementClickInterceptedException
@@ -73,8 +73,7 @@ class TwitchHomePage(BasePage):
             ']'
         )
 
-
-        el = wait_first_visible(self.driver, By.XPATH, streamer_xpath, timeout=20)
+        el = wait_visible(self.driver, By.XPATH, streamer_xpath, timeout=20)
 
         # JS click
         self.driver.execute_script(
