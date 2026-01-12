@@ -2,7 +2,7 @@ import time
 from urllib.parse import quote
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-from utils.waits import wait_visible
+from utils.waits import wait_visible, wait_first_visible
 from utils.scroll import scroll_down
 from utils.popup import close_popups_best_effort
 from selenium.common.exceptions import ElementClickInterceptedException
@@ -10,7 +10,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 class TwitchHomePage(BasePage):
     URL = "https://www.twitch.tv/"
 
-    # 現階段twitch首頁沒有SEARCH INPUT , 但仍保留：如果哪天 /search 的 input 找得到可以用
+    # 現階段twitch首頁沒有SEARCH INPUT , 但仍保留哪天 /search 的 input 找得到可以用
     SEARCH_INPUT_CANDIDATES = [
         (By.XPATH, '//input[contains(@placeholder, "搜尋")]'),
         (By.XPATH, '//input[contains(@placeholder, "Search")]'),
@@ -58,26 +58,23 @@ class TwitchHomePage(BasePage):
 
         # Step 2: 找第一個 streamer link（排除首頁/分類/影片/剪輯）
         streamer_xpath = (
-            # 只在 <main> 區塊內找，避免 header / footer / nav 的雜連結
             '//main//a['
-             # 必須是站內連結（/xxx）
+            '('
             'starts-with(@href,"/")'
-            # 排除只有 "/" 的首頁連結
+            ' or starts-with(@href,"https://www.twitch.tv/")'
+            ' or starts-with(@href,"https://m.twitch.tv/")'
+            ')'
             ' and string-length(@href) > 1'
             ' and not(@href="/")'
-            # 排除搜尋頁本身
-            ' and not(starts-with(@href,"/search"))'
-            # 排除遊戲分類頁（如 /directory/game/...）
+            ' and not(contains(@href,"/search"))'
             ' and not(contains(@href,"/directory"))'
-            # 排除影片頁（如 /videos/xxxx）
             ' and not(contains(@href,"/videos"))'
-            # 排除剪輯頁（如 /clip/xxxx）
             ' and not(contains(@href,"/clip"))'
-            # 剩下 /<streamer_name>
             ']'
         )
 
-        el = wait_visible(self.driver, By.XPATH, streamer_xpath, timeout=20)
+
+        el = wait_first_visible(self.driver, By.XPATH, streamer_xpath, timeout=20)
 
         # JS click
         self.driver.execute_script(

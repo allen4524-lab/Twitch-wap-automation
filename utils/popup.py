@@ -12,7 +12,6 @@ def _safe_click(driver: WebDriver, by: str, sel: str) -> bool:
         #找所有可能的元素
         els = driver.find_elements(by, sel)
         for el in els:
-            #只點「真的可見、可用的」
             if el.is_displayed() and el.is_enabled():
                 try:
                     el.click()

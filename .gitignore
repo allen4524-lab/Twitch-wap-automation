@@ -3,11 +3,6 @@ __pycache__/
 *.pyc
 .venv/
 
-# Selenium artifacts
-artifacts/
-*.png
-*.gif
-
 # IDE
 .vscode/
 .idea/

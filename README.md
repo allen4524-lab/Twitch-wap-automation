@@ -14,7 +14,7 @@ source .venv/bin/activate  # mac/linux
 pip install -r requirements.txt
 
 # Twitch WAP Automation
-
+```
 ## Demo (running locally)
 
 ![Twitch WAP automation running locally](media/demo.gif)
@@ -25,3 +25,7 @@ This GIF shows the test running locally:
 - Scroll down twice
 - Navigate to Channels
 - Open a streamer
+
+## Screenshot 
+
+![Streamer page loaded](artifacts/streamer_page.png)
